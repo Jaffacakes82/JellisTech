@@ -4,19 +4,30 @@
       <div class="console-text">
         <p class="date-text">Last login: {{getDate()}}</p>
         <div class="command-text">
-          <div class="tags has-addons is-marginless">
-            <span class="tag is-light is-marginless">Joe@jellistech</span>
-            <span class="tag is-dark is-marginless">$</span>
-          </div>
-          <span>Hello World!</span>
+          <span class="tag">
+            Joe@jellistech&nbsp;
+            <i class="fas fa-chevron-right"></i>
+          </span>
+          <span>{{commandText}}</span>
+          <span v-show="showCursor" class="blinking-cursor">|</span>
+        </div>
+        <div v-show="showSecondCmdLine" class="command-text">
+          <span class="tag">
+            Joe@jellistech&nbsp;
+            <i class="fas fa-chevron-right"></i>
+          </span>
+          <span class="blinking-cursor">|</span>
         </div>
       </div>
       <div class="hero-body">
         <div class="container has-text-centered">
-          <progress class="progress" value="15" max="100">15%</progress>
-          <h1 class="title">jellis.tech<span class="blinking-cursor">|</span>
-          </h1>
-          <router-link class="button is-primary is-inverted is-outlined" to="blog">Blog</router-link>
+          <progress v-show="showProgressBar" class="progress is-large" :value="progressVal" max="100"></progress>
+          <div v-show="showMainMenu" class="main-menu">
+            <h1 class="title">
+              <span class="blinking-cursor">|</span>
+            </h1>
+            <router-link class="button is-primary is-inverted is-outlined" to="blog">Blog</router-link>
+          </div>
         </div>
       </div>
     </section>
@@ -25,11 +36,50 @@
 
 <script>
 export default {
+  data: function() {
+    return {
+      showSecondCmdLine: false,
+      showMainMenu: false,
+      showProgressBar: false,
+      textToPrint:
+        "az functionapp start --name JellisTech --resource-group JellisTech",
+      textToPrintIndex: 0,
+      progressVal: 0,
+      commandText: ""
+    };
+  },
   methods: {
     getDate() {
       let date = new Date();
       return date.toLocaleString();
+    },
+    updateProgressBar() {
+      let that = this;
+      this.progressVal++;
+      if (this.progressVal < 100) {
+        setTimeout(function() {
+          that.updateProgressBar();
+        }, 25);
+      }
+    },
+    writeCommandText() {
+      let that = this;
+      this.commandText += this.textToPrint[this.textToPrintIndex];
+      if (this.textToPrintIndex < this.textToPrint.length - 1) {
+        this.textToPrintIndex++;
+        setTimeout(function() {
+          that.writeCommandText();
+        }, 75);
+      } else {
+        this.showCursor = false;
+        this.showSecondCmdLine = true;
+        this.showProgressBar = true;
+        that.updateProgressBar();
+      }
     }
+  },
+  mounted() {
+    this.writeCommandText();
   }
 };
 </script>
@@ -44,9 +94,11 @@ export default {
     display: inline-block;
     padding: 0.5rem;
 
-    .tags {
-      display: inline-block;
-      padding-right: 0.5rem;
+    .tag {
+      margin-right: 0.5rem;
+      font-size: 1rem;
+      color: white;
+      background-color: #0b4c5d99;
     }
 
     .date-text {
@@ -60,13 +112,14 @@ export default {
 
   .title {
     color: unset;
-    .blinking-cursor {
-      -webkit-animation: 1s blink step-end infinite;
-      -moz-animation: 1s blink step-end infinite;
-      -ms-animation: 1s blink step-end infinite;
-      -o-animation: 1s blink step-end infinite;
-      animation: 1s blink step-end infinite;
-    }
+  }
+
+  .blinking-cursor {
+    -webkit-animation: 1s blink step-end infinite;
+    -moz-animation: 1s blink step-end infinite;
+    -ms-animation: 1s blink step-end infinite;
+    -o-animation: 1s blink step-end infinite;
+    animation: 1s blink step-end infinite;
   }
 }
 
