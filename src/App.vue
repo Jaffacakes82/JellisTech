@@ -1,16 +1,12 @@
 <template>
   <div id="app">
     <router-view/>
-    <Footer />
+    <Footer/>
   </div>
 </template>
 
-<style lang="scss">
-@import 'src/assets/css/app.scss';
-</style>
-
 <script>
-import Footer from '@/components/Footer.vue'
+import Footer from "@/components/Footer.vue";
 
 export default {
   name: "app",
@@ -19,3 +15,16 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+body #app {
+  font-family: "Open Sans";
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+
+  .is-full-height {
+    flex: 1;
+  }
+}
+</style>

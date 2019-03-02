@@ -4,12 +4,11 @@
   </div>
 </template>
 
-<style lang="scss">
-@import "src/assets/css/blog.scss";
-</style>
-
 <script>
 export default {
   name: "blog"
 };
 </script>
+
+<style lang="scss">
+</style>

@@ -14,12 +14,17 @@
   </footer>
 </template>
 
-<style lang="scss">
-@import "src/assets/css/footer.scss";
-</style>
-
 <script>
 export default {
-  name: "footer"
 };
 </script>
+
+<style lang="scss">
+footer.footer {
+    padding-bottom:2rem;
+
+    i {
+        color:black;
+    }
+}
+</style>
