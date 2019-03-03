@@ -2,7 +2,7 @@
   <div class="is-full-height">
     <section class="hero is-fullheight is-bold">
       <div class="console-text">
-        <p class="date-text">Last login: {{getDate()}}</p>
+        <p class="date-text">Last login: {{currentDate}}</p>
         <div class="command-text">
           <span class="tag">
             Joe@jellistech&nbsp;
@@ -21,12 +21,16 @@
       </div>
       <div class="hero-body">
         <div class="container has-text-centered">
-          <progress v-show="showProgressBar" class="progress is-large" :value="progressVal" max="100"></progress>
+          <progress
+            v-show="showProgressBar"
+            class="progress is-large is-success"
+            :value="progressVal"
+            max="100"
+            :style="{ opacity: opacityVal }"
+          ></progress>
           <div v-show="showMainMenu" class="main-menu">
-            <h1 class="title">
-              <span class="blinking-cursor">|</span>
-            </h1>
-            <router-link class="button is-primary is-inverted is-outlined" to="blog">Blog</router-link>
+            <h1 class="title">jellis.tech</h1>
+            <router-link class="button is-large is-success is-inverted is-outlined" to="blog">Blog</router-link>
           </div>
         </div>
       </div>
@@ -41,17 +45,28 @@ export default {
       showSecondCmdLine: false,
       showMainMenu: false,
       showProgressBar: false,
+      showCursor: true,
       textToPrint:
         "az functionapp start --name JellisTech --resource-group JellisTech",
       textToPrintIndex: 0,
       progressVal: 0,
-      commandText: ""
+      opacityVal: 1,
+      commandText: "",
+      currentDate: new Date().toLocaleString()
     };
   },
   methods: {
-    getDate() {
-      let date = new Date();
-      return date.toLocaleString();
+    updateOpacity() {
+      let that = this;
+      this.opacityVal = this.opacityVal - 0.1;
+      if (this.opacityVal > 0) {
+        setTimeout(function() {
+          that.updateOpacity();
+        }, 25);
+      } else {
+        this.showProgressBar = false;
+        this.showMainMenu = true;
+      }
     },
     updateProgressBar() {
       let that = this;
@@ -59,7 +74,9 @@ export default {
       if (this.progressVal < 100) {
         setTimeout(function() {
           that.updateProgressBar();
-        }, 25);
+        }, 15);
+      } else {
+        this.updateOpacity();
       }
     },
     writeCommandText() {
@@ -74,7 +91,7 @@ export default {
         this.showCursor = false;
         this.showSecondCmdLine = true;
         this.showProgressBar = true;
-        that.updateProgressBar();
+        this.updateProgressBar();
       }
     }
   },
@@ -92,7 +109,7 @@ export default {
 
   .console-text {
     display: inline-block;
-    padding: 0.5rem;
+    padding: 0.5rem 0 0 0.5rem;
 
     .tag {
       margin-right: 0.5rem;
@@ -110,66 +127,31 @@ export default {
     }
   }
 
-  .title {
-    color: unset;
+  .hero-body {
+    padding-top:0;
+    .title {
+      color: unset;
+    }
+
+    .button {
+      width: 185px
+    }
   }
 
   .blinking-cursor {
-    -webkit-animation: 1s blink step-end infinite;
-    -moz-animation: 1s blink step-end infinite;
-    -ms-animation: 1s blink step-end infinite;
-    -o-animation: 1s blink step-end infinite;
-    animation: 1s blink step-end infinite;
+    animation: blink-animation 1s steps(3, start) infinite;
+    -webkit-animation: blink-animation 1s steps(3, start) infinite;
   }
 }
 
-@keyframes "blink" {
-  from,
+@keyframes blink-animation {
   to {
-    color: transparent;
-  }
-  50% {
-    color: #93a1a1;
+    visibility: hidden;
   }
 }
-
-@-moz-keyframes blink {
-  from,
+@-webkit-keyframes blink-animation {
   to {
-    color: transparent;
-  }
-  50% {
-    color: #93a1a1;
-  }
-}
-
-@-webkit-keyframes "blink" {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #93a1a1;
-  }
-}
-
-@-ms-keyframes "blink" {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #93a1a1;
-  }
-}
-
-@-o-keyframes "blink" {
-  from,
-  to {
-    color: transparent;
-  }
-  50% {
-    color: #93a1a1;
+    visibility: hidden;
   }
 }
 </style>
