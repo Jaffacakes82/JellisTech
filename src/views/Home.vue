@@ -23,14 +23,14 @@
         <div class="container has-text-centered">
           <progress
             v-show="showProgressBar"
-            class="progress is-large is-success"
+            class="progress is-large"
             :value="progressVal"
             max="100"
             :style="{ opacity: opacityVal }"
           ></progress>
           <div v-show="showMainMenu" class="main-menu">
             <h1 class="title">jellis.tech</h1>
-            <router-link class="button is-large is-success is-inverted is-outlined" to="blog">Blog</router-link>
+            <router-link class="button is-large is-link is-inverted is-outlined" to="blog">Blog</router-link>
           </div>
         </div>
       </div>
